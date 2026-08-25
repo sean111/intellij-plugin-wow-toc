@@ -1,0 +1,31 @@
+{
+    parserClass="com.github.sean111.wowtoc.parser.TocParser"
+
+    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+    psiClassPrefix="Toc"
+    psiImplClassSuffix="Impl"
+    psiPackage="com.github.sean111.wowtoc.psi"
+    psiImplPackage="com.github.sean111.wowtoc.psi.impl"
+
+    elementTypeHolderClass="com.github.sean111.wowtoc.psi.TocTypes"
+    elementTypeClass="com.github.sean111.wowtoc.psi.TocElementType"
+    tokenTypeClass="com.github.sean111.wowtoc.psi.TocTokenType"
+
+    psiImplUtilClass="com.github.sean111.wowtoc.psi.impl.TocPsiImplUtil"
+}
+
+tocFile ::= item_*
+
+// A TOC file consists of tags, referenced files, comments, and line breaks.
+private item_ ::= (tag|refer|COMMENT|CRLF)
+
+// A tag can be ##name:value, ##name:, ##:value, ##:, ##name, or ##. Put longer token sequences first.
+tag ::= TAG_PREFIX TAG_NAME SEPARATOR TAG_VALUE?|(TAG_PREFIX SEPARATOR TAG_VALUE?)|(TAG_PREFIX TAG_NAME?)
+ {methods=[getTagName getKeyRange]}
+
+/* A referenced file contains one file name. Elements supporting rename and references implement PsiNamedElement,
+   including getName, setName, and getNameIdentifier. getReference returns the file reference. */
+refer ::= FILE_NAME {mixin="com.github.sean111.wowtoc.psi.impl.TocNamedElementImpl"
+ implements="com.github.sean111.wowtoc.psi.TocNamedElement"
+  methods=[getFileName getName setName getNameIdentifier getReference]}

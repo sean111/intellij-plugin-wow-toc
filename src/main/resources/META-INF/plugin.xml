@@ -1,0 +1,35 @@
+<idea-plugin>
+    <id>com.github.sean111.wowtoc</id>
+    <name>WoW TOC</name>
+    <depends>com.intellij.modules.lang</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType name="TOC File" implementationClass="com.github.sean111.wowtoc.filetype.TocFileType"
+                  fieldName="INSTANCE"
+                  language="TOC" extensions="toc"/>
+        <lang.parserDefinition language="TOC"
+                               implementationClass="com.github.sean111.wowtoc.parser.TocParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="TOC"
+                                       implementationClass="com.github.sean111.wowtoc.highlighter.TocSyntaxHighlighterFactory"/>
+        <colorSettingsPage implementation="com.github.sean111.wowtoc.color.TocColorSettingsPage"/>
+        <annotator language="TOC" implementationClass="com.github.sean111.wowtoc.annotator.TocAnnotator"/>
+        <completion.contributor language="TOC"
+                                implementationClass="com.github.sean111.wowtoc.completion.TocCompletionContributor"/>
+        <lang.findUsagesProvider language="TOC"
+                                 implementationClass="com.github.sean111.wowtoc.findusage.TocFindUsagesProvider"/>
+        <lang.formatter language="TOC"
+                        implementationClass="com.github.sean111.wowtoc.formatter.TocFormattingModelBuilder"/>
+        <codeStyleSettingsProvider implementation="com.github.sean111.wowtoc.codestyle.TocCodeStyleSettingsProvider"/>
+        <langCodeStyleSettingsProvider
+                implementation="com.github.sean111.wowtoc.codestyle.TocLanguageCodeStyleSettingsProvider"/>
+        <lang.commenter language="TOC" implementationClass="com.github.sean111.wowtoc.commenter.TocCommenter"/>
+        <internalFileTemplate name="TOC File"/>
+    </extensions>
+
+    <actions>
+        <action id="TocNewFileAction" class="com.github.sean111.wowtoc.action.TocNewFileAction">
+            <add-to-group group-id="NewGroup" relative-to-action="NewFromTemplate" anchor="before"/>
+        </action>
+    </actions>
+
+</idea-plugin>

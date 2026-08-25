@@ -1,35 +1,28 @@
 # WoW TOC
 
-使 IntelliJ IDEA 支持魔兽世界插件的 .toc 文件。
+Language support for World of Warcraft add-on `.toc` files in IntelliJ-based IDEs.
 
-## 功能
+## Features
 
-- 新建 .toc 文件
+- Create `.toc` files from a template
+- Syntax highlighting and configurable color settings
+- Tag-name and referenced-file validation with quick fixes
+- Official tag-name and referenced-file completion
+- Navigate to and rename referenced files
+- Find usages, formatting, code style settings, and comments
 
-- 编辑新建 .toc 文件的模板
+## Development
 
-- 语法高亮
+Requires Java 25. The Gradle wrapper downloads it automatically when needed.
 
-- 自定义代码颜色设置
+```sh
+make check     # or: just check
+make package   # or: just package
+make run       # or: just run
+```
 
-- 标签名和引用文件的注解
+The packaged plugin ZIP is written to `build/distributions`.
 
-- 快速修复
+## Installation
 
-- 官方标签名提示
-
-- 引用文件名提示
-
-- 打开引用文件
-
-- 重命名引用文件
-
-- 格式化代码
-
-- 自定义代码风格设置
-
-- 注释
-
-## 安装
-
-在 Plugin Marketplace 上搜索 “wow toc” 安装，或在[插件主页](https://plugins.jetbrains.com/plugin/13375-wow-toc/)下载后本地安装。
+Search for "WoW TOC" in JetBrains Marketplace, or download it from the [plugin page](https://plugins.jetbrains.com/plugin/13375-wow-toc/) and install it from disk.

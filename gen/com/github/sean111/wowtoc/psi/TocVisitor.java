@@ -1,0 +1,26 @@
+// This is a generated file. Not intended for manual editing.
+package com.github.sean111.wowtoc.psi;
+
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiElementVisitor;
+import org.jetbrains.annotations.NotNull;
+
+public class TocVisitor extends PsiElementVisitor {
+
+    public void visitRefer(@NotNull TocRefer o) {
+        visitNamedElement(o);
+  }
+
+  public void visitTag(@NotNull TocTag o) {
+    visitPsiElement(o);
+  }
+
+    public void visitNamedElement(@NotNull TocNamedElement o) {
+        visitPsiElement(o);
+    }
+
+  public void visitPsiElement(@NotNull PsiElement o) {
+    visitElement(o);
+  }
+
+}

@@ -5,6 +5,7 @@ import com.github.sean111.wowtoc.psi.TocRefer;
 import com.github.sean111.wowtoc.psi.TocTag;
 import com.github.sean111.wowtoc.psi.TocTypes;
 import com.github.sean111.wowtoc.reference.TocReference;
+import com.github.sean111.wowtoc.spec.TocSpec;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -53,10 +54,15 @@ public class TocPsiImplUtil {
     public static String getFileName(TocRefer psiElement) {
         ASTNode node = psiElement.getNode().findChildByType(TocTypes.FILE_NAME);
         if (node != null) {
-            return node.getText().replaceAll("\\\\ ", " ");
+            return TocSpec.stripConditions(node.getText().replaceAll("\\\\ ", " "));
         } else {
             return null;
         }
+    }
+
+    public static String getTagValue(TocTag psiElement) {
+        ASTNode node = psiElement.getNode().findChildByType(TocTypes.TAG_VALUE);
+        return node == null ? null : node.getText();
     }
 
     public static String getName(TocRefer psiElement) {

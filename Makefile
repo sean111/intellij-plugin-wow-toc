@@ -1,5 +1,7 @@
 .DEFAULT_GOAL := help
 
+GRADLE := GRADLE_USER_HOME=.gradle-user-home ./gradlew
+
 .PHONY: help generate build test check verify run package clean tasks
 
 help:
@@ -9,28 +11,28 @@ help-text:
 	@printf '%s\n' 'Targets: generate build test check verify run package clean tasks'
 
 generate:
-	./gradlew generateLexer
+	$(GRADLE) generateLexer
 
 build:
-	./gradlew build
+	$(GRADLE) build
 
 test:
-	./gradlew test
+	$(GRADLE) test
 
 check:
-	./gradlew check
+	$(GRADLE) check
 
 verify:
-	./gradlew verifyPlugin
+	$(GRADLE) verifyPlugin
 
 run:
-	./gradlew runIde
+	$(GRADLE) runIde
 
 package:
-	./gradlew buildPlugin
+	$(GRADLE) buildPlugin
 
 clean:
-	./gradlew clean
+	$(GRADLE) clean
 
 tasks:
-	./gradlew tasks
+	$(GRADLE) tasks

@@ -1,29 +1,31 @@
+gradle := 'GRADLE_USER_HOME=.gradle-user-home ./gradlew'
+
 default:
   @just --list
 
 generate:
-  ./gradlew generateLexer
+  {{gradle}} generateLexer
 
 build:
-  ./gradlew build
+  {{gradle}} build
 
 test:
-  ./gradlew test
+  {{gradle}} test
 
 check:
-  ./gradlew check
+  {{gradle}} check
 
 verify:
-  ./gradlew verifyPlugin
+  {{gradle}} verifyPlugin
 
 run:
-  ./gradlew runIde
+  {{gradle}} runIde
 
 package:
-  ./gradlew buildPlugin
+  {{gradle}} buildPlugin
 
 clean:
-  ./gradlew clean
+  {{gradle}} clean
 
 tasks:
-  ./gradlew tasks
+  {{gradle}} tasks

@@ -1,6 +1,7 @@
 package com.github.sean111.wowtoc.util;
 
 import com.github.sean111.wowtoc.constant.Constants;
+import com.github.sean111.wowtoc.spec.TocSpec;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -56,7 +57,7 @@ public class TocUtil {
      */
     public static PsiDirectory getDirectory(PsiDirectory baseDirectory, String fileName, boolean createDir) {
         PsiDirectory result = baseDirectory;
-        String[] array = fileName.split("[/\\\\]");
+        String[] array = TocSpec.stripConditions(fileName).split("[/\\\\]");
         for (int i = 0; i < array.length - 1; i++) {
             if (result != null) {
                 PsiDirectory directory = result.findSubdirectory(array[i]);
@@ -77,7 +78,7 @@ public class TocUtil {
      * @return the file name without its directory prefix
      */
     public static String getFileName(String fileName) {
-        String[] array = fileName.split("[/\\\\]");
+        String[] array = TocSpec.stripConditions(fileName).split("[/\\\\]");
         return array[array.length - 1];
     }
 }

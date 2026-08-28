@@ -1,6 +1,8 @@
 /.gradle/
+/.gradle-user-home/
 /build/
 /out/
 /.idea/
 /.intellijPlatform/
 *.iml
+.opencode/

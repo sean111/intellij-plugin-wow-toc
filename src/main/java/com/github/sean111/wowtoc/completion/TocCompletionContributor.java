@@ -4,6 +4,7 @@ import com.github.sean111.wowtoc.constant.Constants;
 import com.github.sean111.wowtoc.lang.TocLanguage;
 import com.github.sean111.wowtoc.psi.TocTypes;
 import com.github.sean111.wowtoc.util.TocUtil;
+import com.github.sean111.wowtoc.spec.TocSpec;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.patterns.PlatformPatterns;
@@ -25,13 +26,16 @@ public class TocCompletionContributor extends CompletionContributor {
                         for (String tagName : Constants.TAG_NAMES) {
                             completionResultSet.addElement(LookupElementBuilder.create(tagName));
                         }
+                        completionResultSet.addElement(LookupElementBuilder.create("RequiredDep"));
+                        completionResultSet.addElement(LookupElementBuilder.create("RequiredDeps"));
                         PsiElement psiElement = completionParameters.getOriginalPosition();
                         if (psiElement != null) {
                             String text = psiElement.getText();
-                            if (text.startsWith("Title") || text.startsWith("Notes")) {
+                            if (text.startsWith("Title") || text.startsWith("Notes") || text.startsWith("Category")) {
+                                int separator = text.indexOf('-');
+                                String baseName = separator >= 0 ? text.substring(0, separator) : text;
                                 for (String localization : Constants.LOCALIZATION) {
-                                    completionResultSet.addElement(LookupElementBuilder.create(text.substring(0, 5)
-                                            + "-" + localization));
+                                    completionResultSet.addElement(LookupElementBuilder.create(baseName + "-" + localization));
                                 }
                             }
                         }
@@ -51,9 +55,41 @@ public class TocCompletionContributor extends CompletionContributor {
                             for (String fileName : fileNames) {
                                 completionResultSet.addElement(LookupElementBuilder.create(fileName));
                             }
+                            for (String variable : TocSpec.FILE_VARIABLES) {
+                                completionResultSet.addElement(LookupElementBuilder.create("[" + variable + "]"));
+                            }
+                            for (String condition : TocSpec.CONDITIONS) {
+                                completionResultSet.addElement(LookupElementBuilder.create("[" + condition + " ]"));
+                            }
                         }
                     }
                 }
         );
+
+        extend(CompletionType.BASIC, PlatformPatterns.psiElement(TocTypes.TAG_VALUE).withLanguage(TocLanguage.INSTANCE),
+                new CompletionProvider<CompletionParameters>() {
+                    @Override
+                    protected void addCompletions(@NotNull CompletionParameters parameters,
+                                                  @NotNull ProcessingContext context,
+                                                  @NotNull CompletionResultSet result) {
+                        PsiElement element = parameters.getOriginalPosition();
+                        String line = element == null ? "" : element.getParent().getText();
+                        if (line.matches("(?i).*AllowLoadGameType.*")) {
+                            addAll(result, TocSpec.GAME_TYPES);
+                        } else if (line.matches("(?i).*AllowLoadTextLocale.*")) {
+                            addAll(result, TocSpec.LOCALES);
+                        } else if (line.matches("(?i).*AllowLoad.*")) {
+                            addAll(result, new String[]{"Both", "Game", "Glue"});
+                        } else if (line.matches("(?i).*DefaultState.*")) {
+                            addAll(result, new String[]{"disabled"});
+                        }
+                    }
+                });
+    }
+
+    private static void addAll(CompletionResultSet result, String[] values) {
+        for (String value : values) {
+            result.addElement(LookupElementBuilder.create(value));
+        }
     }
 }

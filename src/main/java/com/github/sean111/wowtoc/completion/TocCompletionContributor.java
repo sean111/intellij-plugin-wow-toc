@@ -12,7 +12,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.util.ProcessingContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TocCompletionContributor extends CompletionContributor {
     public TocCompletionContributor() {
@@ -75,7 +78,7 @@ public class TocCompletionContributor extends CompletionContributor {
                         PsiElement element = parameters.getOriginalPosition();
                         String line = element == null ? "" : element.getParent().getText();
                         if (line.matches("(?i).*AllowLoadGameType.*")) {
-                            addAll(result, TocSpec.GAME_TYPES);
+                            addGameTypes(result, parameters);
                         } else if (line.matches("(?i).*AllowLoadTextLocale.*")) {
                             addAll(result, TocSpec.LOCALES);
                         } else if (line.matches("(?i).*AllowLoad.*")) {
@@ -90,6 +93,23 @@ public class TocCompletionContributor extends CompletionContributor {
     private static void addAll(CompletionResultSet result, String[] values) {
         for (String value : values) {
             result.addElement(LookupElementBuilder.create(value));
+        }
+    }
+
+    private static void addGameTypes(CompletionResultSet result, CompletionParameters parameters) {
+        String textBeforeCaret = parameters.getOriginalFile().getText().substring(0, parameters.getOffset());
+        Matcher matcher = Pattern.compile("(?i)\\[AllowLoadGameType\\s+([^]]*)$").matcher(textBeforeCaret);
+        Set<String> selected = new HashSet<>();
+        if (matcher.find()) {
+            for (String value : matcher.group(1).split(",")) {
+                selected.add(value.trim().toLowerCase());
+            }
+        }
+
+        for (String gameType : TocSpec.GAME_TYPES) {
+            if (!selected.contains(gameType.toLowerCase())) {
+                result.addElement(LookupElementBuilder.create(gameType));
+            }
         }
     }
 }
